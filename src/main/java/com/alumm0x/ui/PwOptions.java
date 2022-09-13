@@ -58,14 +58,18 @@ public class PwOptions {
         JLabel intercept = new JLabel("密码复杂度选择");
         makeJpanel(options, intercept);
         JCheckBox Upper = new JCheckBox("大写字母");
+        Upper.setSelected(true);
         makeJpanel(options, Upper);
         JCheckBox Lower = new JCheckBox("小写字母");
+        Lower.setSelected(true);
         makeJpanel(options, Lower);
         JCheckBox Case = new JCheckBox("字母（不区分大小写,不能与上面的大写/小写共存）");
         makeJpanel(options, Case);
         JCheckBox Num = new JCheckBox("纯数字");
+        Num.setSelected(true);
         makeJpanel(options, Num);
         JCheckBox Spec = new JCheckBox("特殊字符");
+        Spec.setSelected(true);
         makeJpanel(options, Spec);
 
         JLabel baseData = new JLabel("基础数据集选择(根据选择的数据集生成密码,别选太多,不然有你等的), MinLen: ");
@@ -78,10 +82,12 @@ public class PwOptions {
         JCheckBox Lower_ = new JCheckBox("小写字母（字母/小写）-1");
         makeJpanel(options, Lower_);
         JCheckBox Num_ = new JCheckBox("纯数字（数字）-2");
+        Num_.setSelected(true);
         makeJpanel(options, Num_);
         JCheckBox Dup_ = new JCheckBox("重复字母或数字（大写字母3_0/小写字母3_1/数据3_2)");
         makeJpanel(options, Dup_);
         JCheckBox Spec_ = new JCheckBox("特殊字符（特殊字符）-4");
+        Spec_.setSelected(true);
         makeJpanel(options, Spec_);
         JCheckBox Keyb_ = new JCheckBox("键位字典（数字/小写字母/特殊字符）-5");
         makeJpanel(options, Keyb_);
@@ -90,6 +96,7 @@ public class PwOptions {
         JCheckBox FirstUpper_ = new JCheckBox("首字母大写（字母）-7");
         makeJpanel(options, FirstUpper_);
         JCheckBox default_ = new JCheckBox("常见用户特征（字母，如admin/root/guest/tomcat等）-8");
+        default_.setSelected(true);
         makeJpanel(options, default_);
         // 3.展示特征的表格
         JList<String> list = new JList<>();
