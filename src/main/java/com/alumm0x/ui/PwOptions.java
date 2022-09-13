@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,7 +244,11 @@ public class PwOptions {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO 保存密码到文件
+                JFileChooser chooser = new JFileChooser();
+                if (chooser.showSaveDialog(save)==JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    writeFile(file.getPath());
+                }
             }
         });
         save.setToolTipText("会将生成的密码字典保存到文件");
@@ -303,5 +309,20 @@ public class PwOptions {
             jPanel.add(component);
         }
         all.add(jPanel);
+    }
+
+    //写文件
+    private static void writeFile(String savepath){
+        FileOutputStream fos= null;
+        try {
+            fos = new FileOutputStream(savepath);
+            for (String textArea:
+                 CommonStore.PW_DATA) {
+                fos.write((textArea + "\n").getBytes());
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
