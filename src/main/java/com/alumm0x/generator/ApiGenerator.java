@@ -6,6 +6,7 @@ import com.alumm0x.util.CommonStore;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,11 +46,11 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
                 for (String api : CommonStore.ALL_DATA) {
                     for (String suffix : CommonStore.ALLOW_SUFFIX) {
                         if (api.endsWith(suffix)) {
-                            CommonStore.API_DATA.add(api);
+                            notInsideAdd(CommonStore.API_DATA, api); //无重复再添加
                         } else {
                             // 无后缀的数据添加
                             if (CommonStore.NONE_OFF && !api.contains(".")){
-                                CommonStore.API_DATA.add(api);
+                                notInsideAdd(CommonStore.API_DATA, api); //无重复再添加
                             }
                         }
                     }
@@ -72,5 +73,16 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
         }
         // 没有path参数则返回原数据
         return api;
+    }
+
+    /**
+     * 检查是否存在，不存在再添加
+     * @param list 待添加数据的集合
+     * @param add 添加的数据
+     */
+    public static void notInsideAdd(List<String> list, String add){
+        if (!list.contains(add)){
+            list.add(add);
+        }
     }
 }

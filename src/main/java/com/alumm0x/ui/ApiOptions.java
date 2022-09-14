@@ -1,6 +1,7 @@
 package com.alumm0x.ui;
 
 
+import com.alumm0x.generator.ApiGenerator;
 import com.alumm0x.generator.PasswordGenerator;
 import com.alumm0x.util.CommonStore;
 
@@ -105,7 +106,7 @@ public class ApiOptions {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String value = ApiOptions.add_suffix.getText();
-                CommonStore.CUSTOMIZE_SUFFIX.add(value);
+                ApiGenerator.notInsideAdd(CommonStore.CUSTOMIZE_SUFFIX, value); //无重复再添加
                 // JList更新数据必须通过setModel，重新设置数据
                 list.setModel(new AbstractListModel<String>() {
                     public int getSize() {
@@ -194,7 +195,7 @@ public class ApiOptions {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String value = ApiOptions.add_pathValue.getText();
-                CommonStore.CUSTOMIZE_PATH_FLAG.add(value);
+                ApiGenerator.notInsideAdd(CommonStore.CUSTOMIZE_PATH_FLAG, value); //无重复再添加
                 // JList更新数据必须通过setModel，重新设置数据
                 path_param.setModel(new AbstractListModel<String>() {
                     public int getSize() {
@@ -320,7 +321,7 @@ class ApiItemListener  implements ItemListener {
                 CommonStore.ALLOW_SUFFIX.remove(".none");
                 CommonStore.NONE_OFF = false;
             }else if (key.equalsIgnoreCase("自定义后缀")){
-                CommonStore.ALLOW_SUFFIX.addAll(CommonStore.CUSTOMIZE_SUFFIX);
+                CommonStore.ALLOW_SUFFIX.removeAll(CommonStore.CUSTOMIZE_SUFFIX);
             }else if (key.equalsIgnoreCase("自定义api (粘贴api清单)")){
                 CommonStore.CUSTOMIZE_API = false;
             }
