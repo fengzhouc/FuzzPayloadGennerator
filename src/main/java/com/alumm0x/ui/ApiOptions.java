@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -121,7 +122,7 @@ public class ApiOptions {
         });
         add_suffix = new JTextField(); //输入框，自定义后缀
         add_suffix.setColumns(10);
-        add_suffix.setText("");
+        add_suffix.setText(".json");
         JButton romove = new JButton("Remove");
         romove.addActionListener(new ActionListener() {
             @Override
@@ -205,7 +206,7 @@ public class ApiOptions {
                         return CommonStore.CUSTOMIZE_PATH_FLAG.get(i);
                     }
                 });
-                ApiOptions.add_suffix.setText("");
+                ApiOptions.add_pathValue.setText("");
             }
         });
         add_pathValue = new JTextField(); //输入框，path参数标识
@@ -296,7 +297,7 @@ class ApiItemListener  implements ItemListener {
                 CommonStore.ALLOW_SUFFIX.add(".none");
                 CommonStore.NONE_OFF = true;
             }else if (key.equalsIgnoreCase("自定义后缀")){
-                CommonStore.ALLOW_SUFFIX.addAll(CommonStore.CUSTOMIZE_SUFFIX);
+                CommonStore.ALLOW_SUFFIX.addAll(CommonStore.CUSTOMIZE_SUFFIX.stream().filter(str -> !CommonStore.ALLOW_SUFFIX.contains(str)).collect(Collectors.toList()));
             }else if (key.equalsIgnoreCase("自定义api (粘贴api清单)")){
                 CommonStore.CUSTOMIZE_API = true;
             }
