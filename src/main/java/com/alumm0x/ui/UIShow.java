@@ -12,7 +12,8 @@ public class UIShow {
         contentPane.setLayout(new BorderLayout());
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.addTab("Info", Info.getInfo());
-        jTabbedPane.addTab("pwOptions", PwOptions.getpwOptions());
+        jTabbedPane.addTab("pwOptions", PwOptions.getOptions());
+        jTabbedPane.addTab("apiOptions", ApiOptions.getOptions());
         contentPane.add(jTabbedPane);
         return contentPane;
     }
