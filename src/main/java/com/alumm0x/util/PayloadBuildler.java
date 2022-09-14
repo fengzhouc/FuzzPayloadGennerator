@@ -211,10 +211,10 @@ public class PayloadBuildler {
 
     /**
      * 首字母大写数据集，只是处理方法，将已有的数据处理成首字母大写
-     * TODO 这样设计太受限了，搞个开阔点的设计
      * @param lowerList 待处理的列表
      * @return 返回首字母大写的列表
      */
+    //TODO 这样设计太受限了，搞个开阔点的设计
     public static List<String> getFirstUpperData(List<String> lowerList){
         List<String> firstUpper = new ArrayList<>();
         for (String str :

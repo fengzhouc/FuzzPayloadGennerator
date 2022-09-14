@@ -4,6 +4,7 @@ package com.alumm0x.ui;
 import com.alumm0x.generator.ApiGenerator;
 import com.alumm0x.generator.PasswordGenerator;
 import com.alumm0x.util.CommonStore;
+import com.alumm0x.util.PayloadBuildler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,8 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -159,6 +159,51 @@ public class ApiOptions {
             }
         });
         makeJpanel(options, add, add_suffix, romove, clear);
+        JLabel maintain = new JLabel("字典数据的维护");
+        makeJpanel(options, maintain);
+        JButton import_ = new JButton("导入文件");
+        import_.setToolTipText("将自己的字典数据导入到插件本地文件中");
+        import_.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                if (chooser.showSaveDialog(import_) == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    try {
+                        BufferedReader in = new BufferedReader(new FileReader(file));
+                        String str;
+                        while ((str = in.readLine()) != null) {
+                            ApiGenerator.notInsideAdd(CommonStore.ALL_DATA, str);
+                        }
+                        // 再写到本地文件
+                        BufferedWriter out = null;
+                        try {
+                            File apiFile = new File(CommonStore.ALL_DATA_PATH);
+                            if (apiFile.createNewFile()){
+                                CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath();
+                            }
+                            out = new BufferedWriter(new FileWriter(apiFile));
+                            for (String data : CommonStore.ALL_DATA) {
+                                out.write(data);
+                                out.newLine();
+                            }
+                        } catch (IOException e1) {
+                            CommonStore.callbacks.printError(e1.getMessage());
+                        }finally {
+                            if (out != null) {
+                                try {
+                                    out.flush();
+                                    out.close();
+                                } catch (IOException ignored1) {
+                                }
+                            }
+                            JOptionPane.showMessageDialog(options,"导入成功");
+                        }
+                    } catch (IOException ignored) {}
+                }
+            }
+        });
+        makeJpanel(options, import_);
 
         //自定义api的总UI
         JPanel operate = new JPanel();
