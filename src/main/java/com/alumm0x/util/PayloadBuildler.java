@@ -1,5 +1,8 @@
 package com.alumm0x.util;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -208,6 +211,7 @@ public class PayloadBuildler {
 
     /**
      * 首字母大写数据集，只是处理方法，将已有的数据处理成首字母大写
+     * TODO 这样设计太受限了，搞个开阔点的设计
      * @param lowerList 待处理的列表
      * @return 返回首字母大写的列表
      */
@@ -230,4 +234,23 @@ public class PayloadBuildler {
         return SourceLoader.loadSources("/password/default.oh");
     }
     // ########################密码基础数据集############################
+
+    /**
+     * 记载本地文件数据
+     * @param path 本地文件完整路径
+     * @return 按行处理为List返回
+     */
+    public static List<String> getLocalData(String path){
+        List<String> list = new ArrayList<>();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(path));
+            String str;
+            while ((str = in.readLine()) != null) {
+                list.add(str);
+            }
+        } catch (Exception e) {
+            CommonStore.callbacks.printError("[PayloadBuildler.getLocalData]" + e.getMessage());
+        }
+        return list;
+    }
 }

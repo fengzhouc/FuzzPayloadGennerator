@@ -3,6 +3,7 @@ package com.alumm0x.ui;
 
 import com.alumm0x.generator.PasswordGenerator;
 import com.alumm0x.util.CommonStore;
+import com.alumm0x.util.PayloadBuildler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -112,7 +113,7 @@ public class PwOptions {
             }
         });
         JScrollPane default_scrollPane = new JScrollPane(list);
-        default_scrollPane.setPreferredSize(new Dimension(350, 100));
+        default_scrollPane.setPreferredSize(new Dimension(400, 100));
         default_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         makeJpanel(options, default_scrollPane);
         // 3.1 添加/删除/清空等的按钮
@@ -170,7 +171,23 @@ public class PwOptions {
                 });
             }
         });
-        makeJpanel(options, add, add_v, romove, clear);
+        JButton default_feature = new JButton("Default");
+        default_feature.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CommonStore.DEFAULT_DATA = PayloadBuildler.getDefaultData();
+                // JList更新数据必须通过setModel，重新设置数据
+                list.setModel(new AbstractListModel<String>() {
+                    public int getSize() {
+                        return CommonStore.DEFAULT_DATA.size();
+                    }
+                    public String getElementAt(int i) {
+                        return CommonStore.DEFAULT_DATA.get(i);
+                    }
+                });
+            }
+        });
+        makeJpanel(options, add, add_v, romove, clear, default_feature);
         // 4.自定义结构的
         JCheckBox customize = new JCheckBox("自定义组合（根据基础数据集后面的数据,以逗号分隔）");
         makeJpanel(options, customize);

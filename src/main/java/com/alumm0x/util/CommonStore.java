@@ -50,6 +50,7 @@ public class CommonStore {
     public static List<String> CUSTOMIZE_PATH_FLAG = new ArrayList<>(); //自定义的path参数标识
     public static List<String> API_DATA = new ArrayList<>(); //最后的api数据
     public static List<String> ALL_DATA = new ArrayList<>(); //all.oh字典里的所有数据
+    public static String ALL_DATA_PATH = ""; //all.oh字典的本地路径
     public static boolean ALL_OFF = false; //all的开关
     public static boolean NONE_OFF = false; //无后缀类型的开关
 
