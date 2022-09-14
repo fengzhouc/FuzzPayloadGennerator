@@ -43,5 +43,15 @@ public class CommonStore {
     public static List<String> DEFAULT_DATA = PayloadBuildler.getDefaultData();
 
 
+    // apiOptions-start
+    public static boolean CUSTOMIZE_API = false; //自定义api是否开启
+    public static List<String> ALLOW_SUFFIX = new ArrayList<>(); //允许的后缀
+    public static List<String> CUSTOMIZE_SUFFIX = new ArrayList<>(); //自定义的后缀
+    public static List<String> CUSTOMIZE_PATH_FLAG = new ArrayList<>(); //自定义的path参数标识
+    public static List<String> API_DATA = new ArrayList<>(); //最后的api数据
+    public static List<String> ALL_DATA = new ArrayList<>(); //all.oh字典里的所有数据
+    public static boolean ALL_OFF = false; //all的开关
+    public static boolean NONE_OFF = false; //无后缀类型的开关
 
+    // apiOptions-end
 }

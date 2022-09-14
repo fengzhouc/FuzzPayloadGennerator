@@ -17,7 +17,8 @@ public class BurpExtender implements IBurpExtender, IExtensionStateListener, ITa
         callbacks.setExtensionName("FuzzGOGOGO");
 
         callbacks.registerExtensionStateListener(this);
-        callbacks.registerIntruderPayloadGeneratorFactory(new GeneratorFactory());
+        callbacks.registerIntruderPayloadGeneratorFactory(new GeneratorFactory("password"));
+        callbacks.registerIntruderPayloadGeneratorFactory(new GeneratorFactory("api"));
 
         callbacks.addSuiteTab(BurpExtender.this);
     }
