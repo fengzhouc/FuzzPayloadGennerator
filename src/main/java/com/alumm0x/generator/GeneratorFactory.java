@@ -6,6 +6,8 @@ import burp.IIntruderPayloadGeneratorFactory;
 import com.alumm0x.util.CommonStore;
 import com.alumm0x.util.SourceLoader;
 
+import java.util.ArrayList;
+
 public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
     String type = "";
 
@@ -25,6 +27,7 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
     public IIntruderPayloadGenerator createNewInstance(IIntruderAttack attack) {
         if (type.equalsIgnoreCase("api")){
             ApiGenerator apiGenerator = new ApiGenerator();
+            CommonStore.API_DATA = new ArrayList<>(); //初始化为空
             // 根据配置初始化数据
             apiGenerator.init();
             return apiGenerator;
