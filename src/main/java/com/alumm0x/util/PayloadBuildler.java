@@ -2,6 +2,7 @@ package com.alumm0x.util;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,25 @@ public class PayloadBuildler {
     public static List<String> DIGIT = Arrays.asList("0","1","2","3","4","5","6","7","8","9");
     public static List<String> SPECIAL = Arrays.asList("~","`","!","@","#","$","%","^","&","*","(",")","-","_","=","+","[","]","{","}","\\","|",";",":","'","\"",",","<",".",">","/","?");
 
+    //##########用于整理字典，去重合并###################
+    public static void main(String[] args){
+        List<String> list = SourceLoader.loadSources("/password/password.oh").stream().distinct().collect(Collectors.toList());
+        writeFile("/Users/cvte/selfspace/code/FuzzPayloadGennerator/src/main/resources/password/password.oh", list);
+    }
+    //写文件
+    private static void writeFile(String savepath, List<String> list){
+        FileOutputStream fos= null;
+        try {
+            fos = new FileOutputStream(savepath);
+            for (String textArea: list) {
+                fos.write((textArea + "\n").getBytes());
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //##########用于整理字典，去重合并###################
     /**
      * java8新特性 笛卡尔积算法，求多数据集所有组合，但不排序哈，顺序全看传入数据集的顺序
      * @param lists 数据集
@@ -253,4 +273,20 @@ public class PayloadBuildler {
         }
         return list;
     }
+
+    //################对数据进行处理#####################
+
+    /**
+     * 首字母大写
+     * @param str 待处理的字符串
+     * @return 处理后的结果
+     */
+    public static String firstToUpper(String str){
+        char[] cs = str.toCharArray();
+        if (Character.isLowerCase(cs[0])) {
+            cs[0] -= 32;
+        }
+        return String.valueOf(cs);
+    }
+
 }

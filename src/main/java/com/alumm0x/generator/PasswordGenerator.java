@@ -116,7 +116,7 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
         // 根据配置生成密码
         try {
             // 将结果添加到已有的数据中
-            CommonStore.PW_DATA.addAll(makePaylaod());
+            CommonStore.PW_DATA.addAll(handlerPW(makePaylaod()));
         }catch (Exception e){
             CommonStore.callbacks.printError(e.getMessage());
         }
@@ -127,10 +127,26 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
         initConf();
         // 根据配置生成密码
         try {
-            CommonStore.PW_DATA = makePaylaod();
+            CommonStore.PW_DATA = handlerPW(makePaylaod());
         }catch (Exception e){
             CommonStore.callbacks.printError(e.getMessage());
         }
+    }
+
+    /**
+     * 处理生成的数据
+     * @param pw 待处理的数据集
+     * @return 返回处理后的集合
+     */
+    public static List<String> handlerPW(List<String> pw){
+        String key = (String) PwOptions.comboBox.getSelectedItem();
+        switch (Objects.requireNonNull(key)){
+            case "首字母大写":
+                return pw.stream().map(PayloadBuildler::firstToUpper).collect(Collectors.toList());
+            case "全部小写":
+                break;
+        }
+        return pw;
     }
 
     private static void initConf(){
@@ -158,28 +174,20 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
         if (CommonStore.NUMBER_OFF && CommonStore.CHECKCONTAINDIGIT_OFF){
             listss.put("2", PayloadBuildler.getNumberData());
         }
-        if (CommonStore.DUPLICATE_OFF){ //重复字符
-            if (CommonStore.CHECKCONTAINUPPERCASE_OFF) { //小写勾选
-                listss.put("3_0", PayloadBuildler.makeDups(PayloadBuildler.UPPER));
-            }
-            if (CommonStore.CHECKCONTAINLOWERCASE_OFF) { //大写勾选
-                listss.put("3_1", PayloadBuildler.makeDups(PayloadBuildler.LOWER));
-            }
-            if (CommonStore.CHECKCONTAINDIGIT_OFF) { //数字勾选
-                listss.put("3_2", PayloadBuildler.makeDups(PayloadBuildler.DIGIT));
-            }
+        if (CommonStore.DUPLICATE_CASE_OFF){ //重复字母
+            listss.put("3", PayloadBuildler.makeDups(PayloadBuildler.LOWER));
+        }
+        if (CommonStore.DUPLICATE_DIGIT_OFF){ //重复数字
+            listss.put("4", PayloadBuildler.makeDups(PayloadBuildler.DIGIT));
         }
         if (CommonStore.SPECIAL_OFF && CommonStore.CHECKCONTAINSPECIALCHAR_OFF){
-            listss.put("4", PayloadBuildler.getSpecialData());
+            listss.put("5", PayloadBuildler.getSpecialData());
         }
         if (CommonStore.KEYBOARD_OFF){
-            listss.put("5", PayloadBuildler.getKeyboardData());
+            listss.put("6", PayloadBuildler.getKeyboardData());
         }
         if (CommonStore.TIME_OFF){
-            listss.put("6", PayloadBuildler.getTimeData());
-        }
-        if (CommonStore.FIRSTUPPER_OFF && CommonStore.CHECKCONTAINCASE_OFF){
-            listss.put("7", PayloadBuildler.getFirstUpperData(PayloadBuildler.getLowerData()));
+            listss.put("7", PayloadBuildler.getTimeData());
         }
         if (CommonStore.DEFAULT_OFF){
             listss.put("8", CommonStore.DEFAULT_DATA);

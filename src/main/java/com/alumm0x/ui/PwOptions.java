@@ -4,6 +4,7 @@ package com.alumm0x.ui;
 import com.alumm0x.generator.PasswordGenerator;
 import com.alumm0x.util.CommonStore;
 import com.alumm0x.util.PayloadBuildler;
+import com.alumm0x.util.SourceLoader;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -25,6 +26,7 @@ public class PwOptions {
     public static JTextField min_baseData; //基础数据的最小长度，最大长度随maxlen_pw
     public static JTextField add_v; //添加的特征值
     public static JTextField customize_v; //自定义组合
+    public static JComboBox comboBox; //数据处理方式的下拉框
     public static List<JCheckBox> jbs = new ArrayList<>();
 
     public static Component getOptions(){
@@ -80,24 +82,24 @@ public class PwOptions {
         min_baseData.setColumns(3);
         min_baseData.setText(String.valueOf(CommonStore.MIN_LEN));
         makeJpanel(options, baseData, min_baseData);
-        JCheckBox Upper_ = new JCheckBox("大写字母（字母/大写）-0");
+        JCheckBox Upper_ = new JCheckBox("大写字母 -0");
         makeJpanel(options, Upper_);
-        JCheckBox Lower_ = new JCheckBox("小写字母（字母/小写）-1");
+        JCheckBox Lower_ = new JCheckBox("小写字母 -1");
         makeJpanel(options, Lower_);
-        JCheckBox Num_ = new JCheckBox("纯数字（数字）-2");
+        JCheckBox Num_ = new JCheckBox("纯数字 -2");
         Num_.setSelected(true);
         makeJpanel(options, Num_);
-        JCheckBox Dup_ = new JCheckBox("重复字母或数字（大写字母3_0/小写字母3_1/数据3_2)");
-        makeJpanel(options, Dup_);
-        JCheckBox Spec_ = new JCheckBox("特殊字符（特殊字符）-4");
+        JCheckBox Dup_Case = new JCheckBox("重复字母 -3");
+        makeJpanel(options, Dup_Case);
+        JCheckBox Dup_Digit = new JCheckBox("重复数字 -4");
+        makeJpanel(options, Dup_Digit);
+        JCheckBox Spec_ = new JCheckBox("特殊字符 -5");
         Spec_.setSelected(true);
         makeJpanel(options, Spec_);
-        JCheckBox Keyb_ = new JCheckBox("键位字典（数字/小写字母/特殊字符）-5");
+        JCheckBox Keyb_ = new JCheckBox("键位字典 -6");
         makeJpanel(options, Keyb_);
-        JCheckBox Time_ = new JCheckBox("时间字典（数字）-6");
+        JCheckBox Time_ = new JCheckBox("时间字典 -7");
         makeJpanel(options, Time_);
-        JCheckBox FirstUpper_ = new JCheckBox("首字母大写（字母）-7");
-        makeJpanel(options, FirstUpper_);
         JCheckBox default_ = new JCheckBox("常见用户特征（字母，如admin/root/guest/tomcat等）-8");
         default_.setSelected(true);
         makeJpanel(options, default_);
@@ -198,10 +200,22 @@ public class PwOptions {
 
         //操作payload的总UI
         JPanel operate = new JPanel();
-        operate.setBorder(new EmptyBorder(0, 0, 250, 0)); //组件间间隙
+        operate.setBorder(new EmptyBorder(0, 0, 200, 0)); //组件间间隙
         BoxLayout operate_boxLayout = new BoxLayout(operate, BoxLayout.Y_AXIS);
         operate.setLayout(operate_boxLayout);
         // 展示payload的各部分UI
+        // 0.对生成的数据进行处理的选择
+        JLabel handler = new JLabel("数据处理方式 (请在点击generate按钮前勾选,会将按方式处理)");
+        makeJpanel(operate, handler);
+        // 创建下拉框
+        comboBox = new JComboBox();
+        // 绑定下拉框选项
+        String[] strArray = { "请选择", "首字母大写"};
+        for (String item : strArray)
+        {
+            comboBox.addItem(item);
+        }
+        makeJpanel(operate, comboBox);
         // 1.生成密码的按钮
         JButton generate = new JButton("Addgenerate");
         generate.setToolTipText("根据配置生成密码字典, 然后将结果追加到");
@@ -228,6 +242,7 @@ public class PwOptions {
         makeJpanel(operate, scrollPane);
         // 4.保存密码的按钮及清空按钮
         JButton save = new JButton("Save");
+        save.setToolTipText("会将生成的密码字典保存到文件");
         generate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -277,7 +292,6 @@ public class PwOptions {
                 }
             }
         });
-        save.setToolTipText("会将生成的密码字典保存到文件");
         JButton generate_rm = new JButton("Remove");
         generate_rm.addActionListener(new ActionListener() {
             @Override
@@ -311,9 +325,28 @@ public class PwOptions {
                 });
             }
         });
-        makeJpanel(operate, save, generate_rm, generate_clean);
-        JLabel save_success = new JLabel(""); //保存成功后显示文件名
-        makeJpanel(operate, save_success);
+        JButton loadDefault = new JButton("Default");
+        loadDefault.setToolTipText("加载内置的密码字典数据");
+        loadDefault.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 加载内置字典数据
+                CommonStore.PW_DATA = SourceLoader.loadSources("/password/password.oh");
+                // 设置数量
+                status.setText("Total: " + CommonStore.PW_DATA.size());
+                status.setForeground(new Color(0, 255, 0));
+                // JList更新数据必须通过setModel，重新设置数据
+                table.setModel(new AbstractListModel<String>() {
+                    public int getSize() {
+                        return CommonStore.PW_DATA.size();
+                    }
+                    public String getElementAt(int i) {
+                        return CommonStore.PW_DATA.get(i);
+                    }
+                });
+            }
+        });
+        makeJpanel(operate, save, generate_rm, loadDefault, generate_clean);
 
         pwOptions.add(options);
         pwOptions.add(operate);
@@ -365,7 +398,7 @@ class MyItemListener implements ItemListener {
             if (key.equalsIgnoreCase("大写字母")){
                 CommonStore.CHECKCONTAINUPPERCASE_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("大写字母（字母/大写）-0")){
+                    if (jb.getText().equalsIgnoreCase("大写字母 -0")){
                         jb.setSelected(true);
                         CommonStore.UPPER_OFF = true;
                     }
@@ -378,7 +411,7 @@ class MyItemListener implements ItemListener {
             }else if (key.equalsIgnoreCase("小写字母")){
                 CommonStore.CHECKCONTAINLOWERCASE_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("小写字母（字母/小写）-1")){
+                    if (jb.getText().equalsIgnoreCase("小写字母 -1")){
                         jb.setSelected(true);
                         CommonStore.LOWER_OFF = true;
                     }
@@ -391,11 +424,11 @@ class MyItemListener implements ItemListener {
             }else if (key.equalsIgnoreCase("字母（不区分大小写,不能与上面的大写/小写共存）")){
                 CommonStore.CHECKCONTAINCASE_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("大写字母（字母/大写）-0")){
+                    if (jb.getText().equalsIgnoreCase("大写字母 -0")){
                         jb.setSelected(true);
                         CommonStore.UPPER_OFF = true;
                     }
-                    if (jb.getText().equalsIgnoreCase("小写字母（字母/小写）-1")){
+                    if (jb.getText().equalsIgnoreCase("小写字母 -1")){
                         jb.setSelected(true);
                         CommonStore.LOWER_OFF = true;
                     }
@@ -412,11 +445,11 @@ class MyItemListener implements ItemListener {
             } else if (key.equalsIgnoreCase("纯数字")){
                 CommonStore.CHECKCONTAINDIGIT_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("纯数字（数字）-2")){
+                    if (jb.getText().equalsIgnoreCase("纯数字 -2")){
                         jb.setSelected(true);
                         CommonStore.NUMBER_OFF = true;
                     }
-                    if (jb.getText().equalsIgnoreCase("时间字典（数字）-6")){
+                    if (jb.getText().equalsIgnoreCase("时间字典 -7")){
                         jb.setSelected(true);
                         CommonStore.TIME_OFF = true;
                     }
@@ -424,27 +457,27 @@ class MyItemListener implements ItemListener {
             } else if (key.equalsIgnoreCase("特殊字符")){
                 CommonStore.CHECKCONTAINSPECIALCHAR_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("特殊字符（特殊字符）-4")){
+                    if (jb.getText().equalsIgnoreCase("特殊字符 -5")){
                         jb.setSelected(true);
                         CommonStore.SPECIAL_OFF = true;
                     }
                 }
-            } else if (key.equalsIgnoreCase("大写字母（字母/大写）-0")){
+            } else if (key.equalsIgnoreCase("大写字母 -0")){
                 CommonStore.UPPER_OFF = true;
-            } else if (key.equalsIgnoreCase("小写字母（字母/小写）-1")){
+            } else if (key.equalsIgnoreCase("小写字母 -1")){
                 CommonStore.LOWER_OFF = true;
-            } else if (key.equalsIgnoreCase("纯数字（数字）-2")){
+            } else if (key.equalsIgnoreCase("纯数字 -2")){
                 CommonStore.NUMBER_OFF = true;
-            } else if (key.equalsIgnoreCase("重复字母或数字（大写字母3_0/小写字母3_1/数据3_2)")){
-                CommonStore.DUPLICATE_OFF = true;
-            } else if (key.equalsIgnoreCase("特殊字符（特殊字符）-4")){
+            } else if (key.equalsIgnoreCase("重复字母 -3")){
+                CommonStore.DUPLICATE_CASE_OFF = true;
+            }else if (key.equalsIgnoreCase("重复数字 -4")){
+                CommonStore.DUPLICATE_DIGIT_OFF = true;
+            } else if (key.equalsIgnoreCase("特殊字符 -5")){
                 CommonStore.SPECIAL_OFF = true;
-            } else if (key.equalsIgnoreCase("键位字典（数字/小写字母/特殊字符）-5")){
+            } else if (key.equalsIgnoreCase("键位字典 -6")){
                 CommonStore.KEYBOARD_OFF = true;
-            } else if (key.equalsIgnoreCase("时间字典（数字）-6")){
+            } else if (key.equalsIgnoreCase("时间字典 -7")){
                 CommonStore.TIME_OFF = true;
-            } else if (key.equalsIgnoreCase("首字母大写（字母）-7")){
-                CommonStore.FIRSTUPPER_OFF = true;
             } else if (key.equalsIgnoreCase("常见用户特征（字母，如admin/root/guest/tomcat等）-8")){
                 CommonStore.DEFAULT_OFF = true;
             } else if (key.equalsIgnoreCase("自定义组合（根据基础数据集后面的数据,以逗号分隔）")){
@@ -464,22 +497,22 @@ class MyItemListener implements ItemListener {
                 CommonStore.CHECKCONTAINDIGIT_OFF = false;
             } else if (key.equalsIgnoreCase("特殊字符")){
                 CommonStore.CHECKCONTAINSPECIALCHAR_OFF = false;
-            } else if (key.equalsIgnoreCase("大写字母（字母/大写）-0")){
+            } else if (key.equalsIgnoreCase("大写字母 -0")){
                 CommonStore.UPPER_OFF = false;
-            } else if (key.equalsIgnoreCase("小写字母（字母/小写）-1")){
+            } else if (key.equalsIgnoreCase("小写字母 -1")){
                 CommonStore.LOWER_OFF = false;
-            } else if (key.equalsIgnoreCase("纯数字（数字）-2")){
+            } else if (key.equalsIgnoreCase("纯数字 -2")){
                 CommonStore.NUMBER_OFF = false;
-            } else if (key.equalsIgnoreCase("重复字母或数字（大写字母3_0/小写字母3_1/数据3_2)")){
-                CommonStore.DUPLICATE_OFF = false;
-            } else if (key.equalsIgnoreCase("特殊字符（特殊字符）-4")){
+            } else if (key.equalsIgnoreCase("重复字母 -3")){
+                CommonStore.DUPLICATE_CASE_OFF = false;
+            }else if (key.equalsIgnoreCase("重复数字 -4")){
+                CommonStore.DUPLICATE_DIGIT_OFF = false;
+            } else if (key.equalsIgnoreCase("特殊字符 -5")){
                 CommonStore.SPECIAL_OFF = false;
-            } else if (key.equalsIgnoreCase("键位字典（数字/小写字母/特殊字符）-5")){
+            } else if (key.equalsIgnoreCase("键位字典 -6")){
                 CommonStore.KEYBOARD_OFF = false;
-            } else if (key.equalsIgnoreCase("时间字典（数字）-6")){
+            } else if (key.equalsIgnoreCase("时间字典 -7")){
                 CommonStore.TIME_OFF = false;
-            } else if (key.equalsIgnoreCase("首字母大写（字母）-7")){
-                CommonStore.FIRSTUPPER_OFF = false;
             } else if (key.equalsIgnoreCase("常见用户特征（字母，如admin/root/guest/tomcat等）-8")){
                 CommonStore.DEFAULT_OFF = false;
             } else if (key.equalsIgnoreCase("自定义组合（根据基础数据集后面的数据,以逗号分隔）")){

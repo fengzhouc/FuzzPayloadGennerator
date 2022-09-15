@@ -28,11 +28,11 @@ public class CommonStore {
     public static boolean UPPER_OFF = false; // 基础数据集：大写字母
     public static boolean LOWER_OFF = false; // 基础数据集：小写字母
     public static boolean NUMBER_OFF = true; // 基础数据集：数字
-    public static boolean DUPLICATE_OFF = false; // 基础数据集：重复字母或数字
+    public static boolean DUPLICATE_CASE_OFF = false; // 基础数据集：重复字母
+    public static boolean DUPLICATE_DIGIT_OFF = false; // 基础数据集：重复数字
     public static boolean SPECIAL_OFF = true; // 基础数据集：特殊字符
     public static boolean KEYBOARD_OFF = false; // 基础数据集：键位数据
     public static boolean TIME_OFF = false; // 基础数据集：年月日
-    public static boolean FIRSTUPPER_OFF = false; // 基础数据集：首字母大写
     public static boolean DEFAULT_OFF = true; // 基础数据集：常见用户特征.可添加
     public static boolean CUSTOMIZE_OFF = false; // 自定义密码组成，比如特征+特殊字符+数字，admin@123
     public static String CUSTOMIZE_CONFIG = ""; // 自定义密码组成，比如特征+特殊字符+数字，admin@123

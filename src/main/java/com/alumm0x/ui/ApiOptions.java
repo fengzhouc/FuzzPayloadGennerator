@@ -62,7 +62,7 @@ public class ApiOptions {
         apiOptions.setLayout(pwOptions_boxLayout);
         //构造总设置UI
         JPanel options = new JPanel();
-        options.setBorder(new EmptyBorder(0, 0, 400, 0)); //组件间间隙
+        options.setBorder(new EmptyBorder(0, 0, 350, 0)); //组件间间隙
         BoxLayout options_boxLayout = new BoxLayout(options, BoxLayout.Y_AXIS);
         options.setLayout(options_boxLayout);
         // 1.文件类型勾选
