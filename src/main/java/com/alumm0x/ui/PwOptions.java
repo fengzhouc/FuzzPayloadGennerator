@@ -288,7 +288,11 @@ public class PwOptions {
                 JFileChooser chooser = new JFileChooser();
                 if (chooser.showSaveDialog(save)==JFileChooser.APPROVE_OPTION) {
                     File file = chooser.getSelectedFile();
-                    writeFile(file.getPath());
+                    if (writeFile(file.getPath())){
+                        JOptionPane.showMessageDialog(options,"保存成功");
+                    }else {
+                        JOptionPane.showMessageDialog(options,"保存失败");
+                    }
                 }
             }
         });
@@ -371,7 +375,7 @@ public class PwOptions {
     }
 
     //写文件
-    private static void writeFile(String savepath){
+    private static boolean writeFile(String savepath){
         FileOutputStream fos= null;
         try {
             fos = new FileOutputStream(savepath);
@@ -382,7 +386,9 @@ public class PwOptions {
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
 
