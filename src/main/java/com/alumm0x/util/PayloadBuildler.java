@@ -181,24 +181,48 @@ public class PayloadBuildler {
         // 数字加字母的键位
         List<String> num1 = Arrays.asList("1","2","3","4","5","6","7","8","9","0");
         List<String> tab = Arrays.asList("q","w","e","r","t","y","u","i","o","p");
-        List<String> capslk = Arrays.asList("a","s","d","f","g","h","j","k","l");
+        List<String> capslk = Arrays.asList("a","s","d","f","g","h","j","k","l",";");
         List<String> shift = Arrays.asList("z","x","c","v","b","n","m",",",".","/");
         // 九宫格的数字键
         List<String> num9_1 = Arrays.asList("7","8","9");
         List<String> num9_2 = Arrays.asList("4","5","6");
         List<String> num9_3 = Arrays.asList("1","2","3");
-
         // 1.每行的子集
-        keyboard.addAll(PayloadBuildler.getSubLists(num1, 10, true));
-        keyboard.addAll(PayloadBuildler.getSubLists(tab, 10, true));
-        keyboard.addAll(PayloadBuildler.getSubLists(capslk, 10, true));
-        keyboard.addAll(PayloadBuildler.getSubLists(shift, 10, true));
-        // 2.多行的笛卡尔积
-        keyboard.addAll(PayloadBuildler.descartes(tab,capslk,shift)); //纯字母，如qaz
-        keyboard.addAll(PayloadBuildler.descartes(num1,tab,capslk,shift)); //字母加数字，如1qaz
-        keyboard.addAll(PayloadBuildler.descartes(num9_1,num9_2,num9_3)); //九宫格，如741/753
+        keyboard.addAll(PayloadBuildler.getSubLists(num1, num1.size(), true));
+        keyboard.addAll(PayloadBuildler.getSubLists(tab, tab.size(), true));
+        keyboard.addAll(PayloadBuildler.getSubLists(capslk, capslk.size(), true));
+        keyboard.addAll(PayloadBuildler.getSubLists(shift, shift.size(), true));
+        // 2.多行等同为的组合
+        List<String> case2 = makeH(10, tab, capslk, shift);
+        List<String> case3 = makeH(10, num1, tab, capslk, shift);
+        keyboard.addAll(case2); //纯字母，如qaz
+        keyboard.addAll(case3); //字母加数字，如1qaz
+        keyboard.addAll(PayloadBuildler.descartes(num9_1,num9_2,num9_3)); //九宫格的笛卡尔积组合，如741/753
+        // 3. 上面2处理的结果进行切片组合，如qazwsx
+        keyboard.addAll(PayloadBuildler.getSubLists(case2, case2.size(), true));
+        keyboard.addAll(PayloadBuildler.getSubLists(case3, case3.size(), true));
 
         return keyboard;
+    }
+
+    /**
+     * 将多个列表的同index数据拼接起来
+     * @param lists 待处理的列表
+     * @param listLen 所有列表等同的长度
+     * @return 返回处理后的列表
+     */
+    @SafeVarargs
+    private static List<String> makeH(int listLen, List<String>... lists){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < listLen; i++){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (List<String> l :
+                    lists) {
+                stringBuilder.append(l.get(i));
+            }
+            list.add(stringBuilder.toString());
+        }
+        return list;
     }
 
     /**
@@ -227,24 +251,6 @@ public class PayloadBuildler {
         time.addAll(PayloadBuildler.descartes(month, day)); // 月日
         time.addAll(PayloadBuildler.descartes(year, month, day)); // 年月日
         return time;
-    }
-
-    /**
-     * 首字母大写数据集，只是处理方法，将已有的数据处理成首字母大写
-     * @param lowerList 待处理的列表
-     * @return 返回首字母大写的列表
-     */
-    //TODO 这样设计太受限了，搞个开阔点的设计
-    public static List<String> getFirstUpperData(List<String> lowerList){
-        List<String> firstUpper = new ArrayList<>();
-        for (String str :
-                lowerList) {
-            char[] cs = str.toCharArray();
-            cs[0] -= 32;
-            firstUpper.add(String.valueOf(cs));
-        }
-
-        return firstUpper;
     }
 
     /**
