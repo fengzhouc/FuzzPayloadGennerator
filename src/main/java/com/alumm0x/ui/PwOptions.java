@@ -115,7 +115,7 @@ public class PwOptions {
             }
         });
         JScrollPane default_scrollPane = new JScrollPane(list);
-        default_scrollPane.setPreferredSize(new Dimension(400, 100));
+        default_scrollPane.setPreferredSize(new Dimension(430, 100));
         default_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         makeJpanel(options, default_scrollPane);
         // 3.1 添加/删除/清空等的按钮
