@@ -283,8 +283,12 @@ public class PayloadBuildler {
      */
     public static String firstToUpper(String str){
         char[] cs = str.toCharArray();
-        if (Character.isLowerCase(cs[0])) {
-            cs[0] -= 32;
+        // 处理非字母开头的情况，第一个字母大写
+        for (int x = 0; x < cs.length; x++) {
+            if (Character.isLowerCase(cs[x])) {
+                cs[x] -= 32;
+                break;
+            }
         }
         return String.valueOf(cs);
     }
