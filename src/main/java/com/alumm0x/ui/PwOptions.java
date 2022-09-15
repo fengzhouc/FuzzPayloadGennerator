@@ -210,7 +210,7 @@ public class PwOptions {
         // 创建下拉框
         comboBox = new JComboBox();
         // 绑定下拉框选项
-        String[] strArray = { "请选择", "首字母大写"};
+        String[] strArray = { "请选择", "首字母大写", "追加反序值"};
         for (String item : strArray)
         {
             comboBox.addItem(item);

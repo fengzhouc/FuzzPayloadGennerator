@@ -293,4 +293,13 @@ public class PayloadBuildler {
         return String.valueOf(cs);
     }
 
+    /**
+     * 添加反序，比如123 -> 123321
+     * @param str 待处理的字符串
+     * @return 处理后的结果
+     */
+    public static String addReverse(String str){
+        return str + new StringBuffer(str).reverse();
+    }
+
 }
