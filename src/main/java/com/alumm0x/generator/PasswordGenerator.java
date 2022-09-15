@@ -142,9 +142,9 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
         String key = (String) PwOptions.comboBox.getSelectedItem();
         switch (Objects.requireNonNull(key)){
             case "首字母大写":
-                return pw.stream().map(PayloadBuildler::firstToUpper).collect(Collectors.toList());
+                return pw.stream().map(PayloadBuildler::firstToUpper).filter(PasswordGenerator::pwCheck).collect(Collectors.toList());
             case "追加反序值":
-                return pw.stream().map(PayloadBuildler::addReverse).collect(Collectors.toList());
+                return pw.stream().map(PayloadBuildler::addReverse).filter(PasswordGenerator::pwCheck).collect(Collectors.toList());
         }
         return pw;
     }
