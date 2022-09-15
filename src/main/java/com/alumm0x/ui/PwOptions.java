@@ -50,7 +50,7 @@ public class PwOptions {
         maxlen_pw.setText(String.valueOf(CommonStore.MAXLEN_PW));
         makeJpanel(options, length, minlen_pw, split, maxlen_pw);
         // 2.最小复杂度
-        JLabel minlength = new JLabel("密码复杂度: ");
+        JLabel minlength = new JLabel("密码的复杂度: ");
         min_relex = new JTextField(); //输入框，最小复杂度
         min_relex.setColumns(3);
         min_relex.setText(String.valueOf(CommonStore.minRelex));
@@ -86,7 +86,7 @@ public class PwOptions {
         makeJpanel(options, Upper_);
         JCheckBox Lower_ = new JCheckBox("小写字母 -1");
         makeJpanel(options, Lower_);
-        JCheckBox Num_ = new JCheckBox("纯数字 -2");
+        JCheckBox Num_ = new JCheckBox("纯数字啊 -2");
         Num_.setSelected(true);
         makeJpanel(options, Num_);
         JCheckBox Dup_Case = new JCheckBox("重复字母 -3");
@@ -100,7 +100,7 @@ public class PwOptions {
         makeJpanel(options, Keyb_);
         JCheckBox Time_ = new JCheckBox("时间字典 -7");
         makeJpanel(options, Time_);
-        JCheckBox default_ = new JCheckBox("常见用户特征（字母，如admin/root/guest/tomcat等）-8");
+        JCheckBox default_ = new JCheckBox("常见用户特征（如admin/root/guest/tomcat等）-8");
         default_.setSelected(true);
         makeJpanel(options, default_);
         // 3.展示特征的表格
@@ -451,7 +451,7 @@ class MyItemListener implements ItemListener {
             } else if (key.equalsIgnoreCase("纯数字")){
                 CommonStore.CHECKCONTAINDIGIT_OFF = true;
                 for (JCheckBox jb : PwOptions.jbs) {
-                    if (jb.getText().equalsIgnoreCase("纯数字 -2")){
+                    if (jb.getText().equalsIgnoreCase("纯数字啊 -2")){
                         jb.setSelected(true);
                         CommonStore.NUMBER_OFF = true;
                     }
@@ -472,7 +472,7 @@ class MyItemListener implements ItemListener {
                 CommonStore.UPPER_OFF = true;
             } else if (key.equalsIgnoreCase("小写字母 -1")){
                 CommonStore.LOWER_OFF = true;
-            } else if (key.equalsIgnoreCase("纯数字 -2")){
+            } else if (key.equalsIgnoreCase("纯数字啊 -2")){
                 CommonStore.NUMBER_OFF = true;
             } else if (key.equalsIgnoreCase("重复字母 -3")){
                 CommonStore.DUPLICATE_CASE_OFF = true;
@@ -484,7 +484,7 @@ class MyItemListener implements ItemListener {
                 CommonStore.KEYBOARD_OFF = true;
             } else if (key.equalsIgnoreCase("时间字典 -7")){
                 CommonStore.TIME_OFF = true;
-            } else if (key.equalsIgnoreCase("常见用户特征（字母，如admin/root/guest/tomcat等）-8")){
+            } else if (key.equalsIgnoreCase("常见用户特征（如admin/root/guest/tomcat等）-8")){
                 CommonStore.DEFAULT_OFF = true;
             } else if (key.equalsIgnoreCase("自定义组合（根据基础数据集后面的数据,以逗号分隔）")){
                 CommonStore.CUSTOMIZE_OFF = true;
@@ -507,7 +507,7 @@ class MyItemListener implements ItemListener {
                 CommonStore.UPPER_OFF = false;
             } else if (key.equalsIgnoreCase("小写字母 -1")){
                 CommonStore.LOWER_OFF = false;
-            } else if (key.equalsIgnoreCase("纯数字 -2")){
+            } else if (key.equalsIgnoreCase("纯数字啊 -2")){
                 CommonStore.NUMBER_OFF = false;
             } else if (key.equalsIgnoreCase("重复字母 -3")){
                 CommonStore.DUPLICATE_CASE_OFF = false;
@@ -519,7 +519,7 @@ class MyItemListener implements ItemListener {
                 CommonStore.KEYBOARD_OFF = false;
             } else if (key.equalsIgnoreCase("时间字典 -7")){
                 CommonStore.TIME_OFF = false;
-            } else if (key.equalsIgnoreCase("常见用户特征（字母，如admin/root/guest/tomcat等）-8")){
+            } else if (key.equalsIgnoreCase("常见用户特征（如admin/root/guest/tomcat等）-8")){
                 CommonStore.DEFAULT_OFF = false;
             } else if (key.equalsIgnoreCase("自定义组合（根据基础数据集后面的数据,以逗号分隔）")){
                 CommonStore.CUSTOMIZE_OFF = false;
