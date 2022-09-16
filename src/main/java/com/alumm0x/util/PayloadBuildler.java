@@ -1,9 +1,9 @@
 package com.alumm0x.util;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -268,14 +268,22 @@ public class PayloadBuildler {
      */
     public static List<String> getLocalData(String path){
         List<String> list = new ArrayList<>();
+        BufferedReader in = null;
         try {
-            BufferedReader in = new BufferedReader(new FileReader(path));
+            in = new BufferedReader(new FileReader(path));
             String str;
             while ((str = in.readLine()) != null) {
                 list.add(str);
             }
         } catch (Exception e) {
             CommonStore.callbacks.printError("[PayloadBuildler.getLocalData]" + e.getMessage());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored1) {
+                }
+            }
         }
         return list;
     }
