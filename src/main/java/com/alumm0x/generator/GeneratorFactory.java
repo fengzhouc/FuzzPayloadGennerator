@@ -25,8 +25,9 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
         }
         if (type.equalsIgnoreCase("api")){
             // 先加载本地的api字典
+            BufferedReader in = null;
             try {
-                BufferedReader in = new BufferedReader(new FileReader(path + "/FuzzPayloadGenneratorConfig/api/all.oh"));
+                in = new BufferedReader(new FileReader(path + "/FuzzPayloadGenneratorConfig/api/all.oh"));
                 String str;
                 while ((str = in.readLine()) != null) {
                     CommonStore.ALL_DATA.add(str);
@@ -55,6 +56,12 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
                         try {
                             out.flush();
                             out.close();
+                        } catch (IOException ignored1) {
+                        }
+                    }
+                    if (in != null) {
+                        try {
+                            in.close();
                         } catch (IOException ignored1) {
                         }
                     }

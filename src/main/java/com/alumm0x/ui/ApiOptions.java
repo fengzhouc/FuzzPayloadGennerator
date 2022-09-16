@@ -2,9 +2,7 @@ package com.alumm0x.ui;
 
 
 import com.alumm0x.generator.ApiGenerator;
-import com.alumm0x.generator.PasswordGenerator;
 import com.alumm0x.util.CommonStore;
-import com.alumm0x.util.PayloadBuildler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -169,27 +167,29 @@ public class ApiOptions {
                 JFileChooser chooser = new JFileChooser();
                 if (chooser.showSaveDialog(import_) == JFileChooser.APPROVE_OPTION) {
                     File file = chooser.getSelectedFile();
+                    BufferedReader in = null;
+                    BufferedWriter out = null;
                     try {
-                        BufferedReader in = new BufferedReader(new FileReader(file));
+                        in = new BufferedReader(new FileReader(file));
                         String str;
                         while ((str = in.readLine()) != null) {
                             ApiGenerator.notInsideAdd(CommonStore.ALL_DATA, str);
                         }
                         // 再写到本地文件
-                        BufferedWriter out = null;
-                        try {
-                            File apiFile = new File(CommonStore.ALL_DATA_PATH);
-                            if (apiFile.createNewFile()){
-                                CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath();
-                            }
-                            out = new BufferedWriter(new FileWriter(apiFile));
-                            for (String data : CommonStore.ALL_DATA) {
-                                out.write(data);
-                                out.newLine();
-                            }
-                        } catch (IOException e1) {
-                            CommonStore.callbacks.printError(e1.getMessage());
-                        }finally {
+                        File apiFile = new File(CommonStore.ALL_DATA_PATH);
+                        if (apiFile.createNewFile()){
+                            CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath();
+                        }
+                        out = new BufferedWriter(new FileWriter(apiFile));
+                        for (String data : CommonStore.ALL_DATA) {
+                            out.write(data);
+                            out.newLine();
+                        }
+                        JOptionPane.showMessageDialog(options,"导入成功");
+                    } catch (IOException e1) {
+                        CommonStore.callbacks.printError(e1.getMessage());
+                        JOptionPane.showMessageDialog(options,"导入失败,请看日志");
+                    } finally {
                             if (out != null) {
                                 try {
                                     out.flush();
@@ -197,9 +197,13 @@ public class ApiOptions {
                                 } catch (IOException ignored1) {
                                 }
                             }
-                            JOptionPane.showMessageDialog(options,"导入成功");
+                            if (in != null) {
+                                try {
+                                    in.close();
+                                } catch (IOException ignored1) {
+                                }
+                            }
                         }
-                    } catch (IOException ignored) {}
                 }
             }
         });
