@@ -41,8 +41,8 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
                     File apiFile = new File(path + "/FuzzPayloadGenneratorConfig/api/all.oh");
                     if (apiFile.createNewFile()){
                         CommonStore.callbacks.printOutput("CreateFile: " + apiFile.getAbsolutePath());
-                        CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath();
                     }
+                    CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath(); //将落地的字典文件路径保存起来
                     out = new BufferedWriter(new FileWriter(apiFile));
                     for (String data :
                             CommonStore.ALL_DATA) {
