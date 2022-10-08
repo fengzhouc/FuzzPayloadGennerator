@@ -26,7 +26,7 @@ public class PwOptions {
     public static JTextField min_baseData; //基础数据的最小长度，最大长度随maxlen_pw
     public static JTextField add_v; //添加的特征值
     public static JTextField customize_v; //自定义组合
-    public static JComboBox comboBox; //数据处理方式的下拉框
+    public static JComboBox<String> comboBox; //数据处理方式的下拉框
     public static List<JCheckBox> jbs = new ArrayList<>();
 
     public static Component getOptions(){
@@ -208,7 +208,7 @@ public class PwOptions {
         JLabel handler = new JLabel("数据处理方式 (请在点击generate按钮前勾选,会将按方式处理)");
         makeJpanel(operate, handler);
         // 创建下拉框
-        comboBox = new JComboBox();
+        comboBox = new JComboBox<>();
         // 绑定下拉框选项
         String[] strArray = { "请选择", "首字母大写", "追加反序值"};
         for (String item : strArray)
