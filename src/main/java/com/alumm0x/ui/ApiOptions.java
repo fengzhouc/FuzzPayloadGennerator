@@ -67,6 +67,7 @@ public class ApiOptions {
         JLabel suffix = new JLabel("文件后缀选择");
         makeJpanel(options, suffix);
         JCheckBox all = new JCheckBox("all");
+        all.setSelected(true); //默认全部
         makeJpanel(options, all);
         JCheckBox jsp = new JCheckBox("jsp");
         makeJpanel(options, jsp);
