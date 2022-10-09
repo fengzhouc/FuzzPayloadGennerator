@@ -40,7 +40,7 @@ public class Info {
         });
         info.add(collect);
 
-        info.add(new JLabel("######################################"));
+        info.add(new JLabel("    "));
         info.add(new JLabel("By: alumm0x"));
         info.add(new JLabel("Github: https://github.com/fengzhouc/FuzzPayloadGennerator"));
 
