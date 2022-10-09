@@ -1,5 +1,6 @@
 package burp;
 
+import com.alumm0x.collect.ReqMessageCollector;
 import com.alumm0x.generator.GeneratorFactory;
 import com.alumm0x.ui.UIShow;
 import com.alumm0x.util.CommonStore;
@@ -19,6 +20,7 @@ public class BurpExtender implements IBurpExtender, IExtensionStateListener, ITa
         callbacks.registerExtensionStateListener(this);
         callbacks.registerIntruderPayloadGeneratorFactory(new GeneratorFactory("password"));
         callbacks.registerIntruderPayloadGeneratorFactory(new GeneratorFactory("api"));
+        callbacks.registerHttpListener(new ReqMessageCollector());
 
         callbacks.addSuiteTab(BurpExtender.this);
     }

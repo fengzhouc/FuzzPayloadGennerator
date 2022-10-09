@@ -2,6 +2,9 @@ package com.alumm0x.util;
 
 import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
+import burp.IHttpRequestResponse;
+import burp.IMessageEditor;
+import com.alumm0x.collect.LogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +54,16 @@ public class CommonStore {
     public static List<String> API_DATA = new ArrayList<>(); //最后的api数据
     public static List<String> ALL_DATA = new ArrayList<>(); //all.oh字典里的所有数据
     public static String ALL_DATA_PATH = ""; //all.oh字典的本地路径
-    public static boolean ALL_OFF = false; //all的开关
+    public static boolean ALL_OFF = true; //all的开关，默认开
     public static boolean NONE_OFF = false; //无后缀类型的开关
-
     // apiOptions-end
+
+    // ReqMessageCollector
+    public static boolean ON_OFF = false; // 采集器的开关
+    public static String PARENT_PATH = "";
+    public static IMessageEditor requestViewer;
+    public static IMessageEditor responseViewer;
+    public static IHttpRequestResponse currentlyDisplayedItem;
+    public static final java.util.List<LogEntry> log = new ArrayList<>();
+    // ReqMessageCollector
 }

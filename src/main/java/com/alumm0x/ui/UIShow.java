@@ -14,6 +14,7 @@ public class UIShow {
         jTabbedPane.addTab("Info", Info.getInfo());
         jTabbedPane.addTab("pwOptions", PwOptions.getOptions());
         jTabbedPane.addTab("apiOptions", ApiOptions.getOptions());
+        jTabbedPane.addTab("collectLog", CollectorOptions.getOptions());
         contentPane.add(jTabbedPane);
         return contentPane;
     }

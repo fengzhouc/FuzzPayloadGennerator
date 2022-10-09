@@ -9251,3 +9251,4 @@ WordPress/
 WP
 WS_FTP.ini
 model
+api/snapshots/:key
