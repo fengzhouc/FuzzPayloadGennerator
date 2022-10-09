@@ -4,7 +4,14 @@ import burp.IIntruderPayloadGenerator;
 import com.alumm0x.ui.ApiOptions;
 import com.alumm0x.util.CommonStore;
 import com.alumm0x.util.PayloadBuildler;
+import com.alumm0x.util.SourceLoader;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +38,61 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
     }
 
     /**
-     * 根据配置进行初始化
+     * 最开始的初始化，一些前置工作的执行，比如
+     * 1.创建文件夹/文件
+     * 2.落地内置数据到本地
+     */
+    public static void preInit(){
+        // 创建文件夹
+        File file = GeneratorFactory.creatFilePath(ApiGenerator.class.getName());
+        String path = file.getPath();
+        // 先加载本地的api字典
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(path + "/all.oh"));
+            String str;
+            while ((str = in.readLine()) != null) {
+                CommonStore.ALL_DATA.add(str);
+            }
+        } catch (IOException ignored) {
+            // 本地没有就加载jar里面内置的字典数据
+            CommonStore.ALL_DATA = SourceLoader.loadSources("/api/all.oh");
+            // 再尝试落地内置字典到本地
+            BufferedWriter out = null;
+            try {
+                File apiFile = new File(path + "/all.oh");
+                if (apiFile.createNewFile()){
+                    CommonStore.callbacks.printOutput("CreateFile: " + apiFile.getAbsolutePath());
+                }
+                out = new BufferedWriter(new FileWriter(apiFile));
+                for (String data :
+                        CommonStore.ALL_DATA) {
+                    out.write(data);
+                    out.newLine();
+                }
+            } catch (IOException e) {
+                CommonStore.callbacks.printError("[ApiGenerator.preInit]" + e.getMessage());
+            }finally {
+                if (out != null) {
+                    try {
+                        out.flush();
+                        out.close();
+                    } catch (IOException ignored1) {
+                    }
+                }
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored1) {
+                    }
+                }
+            }
+        }
+        CommonStore.ALL_DATA_PATH = path + "/all.oh"; //将落地的字典文件路径保存起来
+    }
+
+    /**
+     * 根据配置进行初始化数据
      */
     public void init(){
         // 优先自定义api，

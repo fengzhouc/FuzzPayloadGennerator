@@ -4,7 +4,6 @@ import burp.IIntruderAttack;
 import burp.IIntruderPayloadGenerator;
 import burp.IIntruderPayloadGeneratorFactory;
 import com.alumm0x.util.CommonStore;
-import com.alumm0x.util.SourceLoader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,56 +16,9 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
     }
     @Override
     public String getGeneratorName() {
-        // 获取当前插件的目录路径
-        String path = new File(CommonStore.callbacks.getExtensionFilename()).getParent();
-        File directory = new File(path + "/FuzzPayloadGenneratorConfig/api");
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
         if (type.equalsIgnoreCase("api")){
-            // 先加载本地的api字典
-            BufferedReader in = null;
-            try {
-                in = new BufferedReader(new FileReader(path + "/FuzzPayloadGenneratorConfig/api/all.oh"));
-                String str;
-                while ((str = in.readLine()) != null) {
-                    CommonStore.ALL_DATA.add(str);
-                }
-            } catch (IOException ignored) {
-                // 本地没有就加载jar里面内置的字典数据
-                CommonStore.ALL_DATA = SourceLoader.loadSources("/api/all.oh");
-                // 再尝试落地内置字典到本地
-                BufferedWriter out = null;
-                try {
-                    File apiFile = new File(path + "/FuzzPayloadGenneratorConfig/api/all.oh");
-                    if (apiFile.createNewFile()){
-                        CommonStore.callbacks.printOutput("CreateFile: " + apiFile.getAbsolutePath());
-                    }
-                    out = new BufferedWriter(new FileWriter(apiFile));
-                    for (String data :
-                            CommonStore.ALL_DATA) {
-                        out.write(data);
-                        out.newLine();
-                    }
-                } catch (IOException e) {
-                    CommonStore.callbacks.printError("[GeneratorFactory.getGeneratorName]" + e.getMessage());
-                }finally {
-                    if (out != null) {
-                        try {
-                            out.flush();
-                            out.close();
-                        } catch (IOException ignored1) {
-                        }
-                    }
-                    if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException ignored1) {
-                        }
-                    }
-                }
-            }
-            CommonStore.ALL_DATA_PATH = path + "/FuzzPayloadGenneratorConfig/api/all.oh"; //将落地的字典文件路径保存起来
+            // 内置数据落地本地
+            ApiGenerator.preInit();
             return "Fuzz-Api";
         }
         return "Fuzz-Password";
@@ -82,5 +34,20 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
             return apiGenerator;
         }
         return new PasswordGenerator();
+    }
+
+    /**
+     * 创建文件目录
+     * @param paths
+     * @return
+     */
+    public static File creatFilePath(String...paths){
+        // 获取当前插件的目录路径
+        String path = new File(CommonStore.callbacks.getExtensionFilename()).getParent();
+        File directory = new File(path + "/FuzzPayloadGenneratorConfig/" + String.join("/", paths));
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
     }
 }

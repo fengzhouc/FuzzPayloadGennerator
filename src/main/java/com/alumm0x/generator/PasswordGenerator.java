@@ -81,6 +81,12 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
     private int payloadIndex = 0;
 
     /**
+     * 对象初始化
+     */
+    public void init(){
+    }
+
+    /**
      * 判断是否还有payload，如果没有了就结束爆破任务
      * @return 是否还有payload
      */
