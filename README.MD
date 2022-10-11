@@ -67,6 +67,8 @@
 实现了一个httplistentr，解析经过的请求，获取参数/子域名/url等信息，日常采集字典
 ![collectLog.png](collectLog.png)
 数据会落地在插件所在目录的`FuzzPayloadGenneratorConfig/com.alumm0x.collect.ReqMessageCollector`目录下
+![collectLog_OFF.png](collectLog_OFF.png)
+开关在Info页面里，勾选即开启
 
 # 未来规划
 ## Username
