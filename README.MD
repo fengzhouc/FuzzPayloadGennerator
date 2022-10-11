@@ -65,6 +65,8 @@
 
 ## 收集请求信息制作字典
 实现了一个httplistentr，解析经过的请求，获取参数/子域名/url等信息，日常采集字典
+![collectLog.png](collectLog.png)
+数据会落地在插件所在目录的`FuzzPayloadGenneratorConfig/com.alumm0x.collect.ReqMessageCollector`目录下
 
 # 未来规划
 ## Username
