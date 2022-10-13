@@ -193,10 +193,10 @@ public class PayloadBuildler {
         keyboard.addAll(PayloadBuildler.getSubLists(capslk, capslk.size(), true)); // a,as,asd,asdf,...
         keyboard.addAll(PayloadBuildler.getSubLists(shift, shift.size(), true)); // z,zx,zxc,zxcv,...
         // 2.多行等同位的组合
-        List<String> case1 = makeH(10, num1, tab); //1q2w3e
-        List<String> case2 = makeH(10, tab, capslk, shift); //纯字母，如qaz
-        List<String> case3 = makeH(10, num1, tab, capslk, shift); //字母加数字，如1qaz
-        keyboard.addAll(case1); //1q2w3e
+        List<String> case1 = makeH(10, num1, tab); //1q,2w,3e
+        List<String> case2 = makeH(10, tab, capslk, shift); //纯字母，如qaz,wsx
+        List<String> case3 = makeH(10, num1, tab, capslk, shift); //字母加数字，如1qaz,2wsx
+        keyboard.addAll(case1); //1q,2w,3e
         keyboard.addAll(case2); //纯字母，如qaz
         keyboard.addAll(case3); //字母加数字，如1qaz
         keyboard.addAll(PayloadBuildler.descartes(num9_1,num9_2,num9_3)); //九宫格的笛卡尔积组合，如741/753
