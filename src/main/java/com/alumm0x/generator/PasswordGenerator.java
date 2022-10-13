@@ -149,6 +149,8 @@ public class PasswordGenerator implements IIntruderPayloadGenerator {
         switch (Objects.requireNonNull(key)){
             case "首字母大写":
                 return pw.stream().map(PayloadBuildler::firstToUpper).filter(PasswordGenerator::pwCheck).collect(Collectors.toList());
+            case "全字母大写":
+                return pw.stream().map(PayloadBuildler::allToUpper).filter(PasswordGenerator::pwCheck).collect(Collectors.toList());
             case "追加反序值":
                 return pw.stream().map(PayloadBuildler::addReverse).filter(PasswordGenerator::pwCheck).collect(Collectors.toList());
         }

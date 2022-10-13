@@ -311,6 +311,22 @@ public class PayloadBuildler {
     }
 
     /**
+     * 全字母大写
+     * @param str 待处理的字符串
+     * @return 处理后的结果
+     */
+    public static String allToUpper(String str){
+        char[] cs = str.toCharArray();
+        // 处理非字母开头的情况，第一个字母大写
+        for (int x = 0; x < cs.length; x++) {
+            if (Character.isLowerCase(cs[x])) {
+                cs[x] -= 32;
+            }
+        }
+        return String.valueOf(cs);
+    }
+
+    /**
      * 添加反序，比如123 -> 123321
      * @param str 待处理的字符串
      * @return 处理后的结果
