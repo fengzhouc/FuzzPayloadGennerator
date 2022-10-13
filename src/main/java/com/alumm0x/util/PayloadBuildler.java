@@ -188,19 +188,22 @@ public class PayloadBuildler {
         List<String> num9_2 = Arrays.asList("4","5","6");
         List<String> num9_3 = Arrays.asList("1","2","3");
         // 1.每行的子集
-        keyboard.addAll(PayloadBuildler.getSubLists(num1, num1.size(), true));
-        keyboard.addAll(PayloadBuildler.getSubLists(tab, tab.size(), true));
-        keyboard.addAll(PayloadBuildler.getSubLists(capslk, capslk.size(), true));
-        keyboard.addAll(PayloadBuildler.getSubLists(shift, shift.size(), true));
-        // 2.多行等同为的组合
-        List<String> case2 = makeH(10, tab, capslk, shift);
-        List<String> case3 = makeH(10, num1, tab, capslk, shift);
+        keyboard.addAll(PayloadBuildler.getSubLists(num1, num1.size(), true)); // 1,12,123,1234,...
+        keyboard.addAll(PayloadBuildler.getSubLists(tab, tab.size(), true)); // q,qw,qwe,qwer,...
+        keyboard.addAll(PayloadBuildler.getSubLists(capslk, capslk.size(), true)); // a,as,asd,asdf,...
+        keyboard.addAll(PayloadBuildler.getSubLists(shift, shift.size(), true)); // z,zx,zxc,zxcv,...
+        // 2.多行等同位的组合
+        List<String> case1 = makeH(10, num1, tab); //1q2w3e
+        List<String> case2 = makeH(10, tab, capslk, shift); //纯字母，如qaz
+        List<String> case3 = makeH(10, num1, tab, capslk, shift); //字母加数字，如1qaz
+        keyboard.addAll(case1); //1q2w3e
         keyboard.addAll(case2); //纯字母，如qaz
         keyboard.addAll(case3); //字母加数字，如1qaz
         keyboard.addAll(PayloadBuildler.descartes(num9_1,num9_2,num9_3)); //九宫格的笛卡尔积组合，如741/753
         // 3. 上面2处理的结果进行切片组合，如qazwsx
-        keyboard.addAll(PayloadBuildler.getSubLists(case2, case2.size(), true));
-        keyboard.addAll(PayloadBuildler.getSubLists(case3, case3.size(), true));
+        keyboard.addAll(PayloadBuildler.getSubLists(case1, case1.size(), true)); // 1q2w3e
+        keyboard.addAll(PayloadBuildler.getSubLists(case2, case2.size(), true)); // qazwsx
+        keyboard.addAll(PayloadBuildler.getSubLists(case3, case3.size(), true)); // 1qaz2wsx
 
         return keyboard;
     }

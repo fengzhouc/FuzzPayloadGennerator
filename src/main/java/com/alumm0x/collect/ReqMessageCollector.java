@@ -4,9 +4,7 @@ import burp.*;
 import com.alumm0x.generator.GeneratorFactory;
 import com.alumm0x.util.CommonStore;
 
-import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
