@@ -77,7 +77,7 @@ public class PwOptions {
         Spec.setSelected(true);
         makeJpanel(options, Spec);
 
-        JLabel baseData = new JLabel("基础数据集选择(根据选择的数据集生成密码,别选太多,不然有你等的), MinLen: ");
+        JLabel baseData = new JLabel("基础数据集选择(根据选择的数据集生成密码,别选太多,不然有你等的), MinStep: ");
         min_baseData = new JTextField(); //输入框，基础数据集的最小长度
         min_baseData.setColumns(3);
         min_baseData.setText(String.valueOf(CommonStore.MIN_LEN));
