@@ -130,7 +130,7 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
         for (String flag : CommonStore.CUSTOMIZE_PATH_FLAG) {
             if (api.contains(flag)){
                 UUID uuid = UUID.randomUUID();
-                return api.replace(flag, uuid.toString());
+                return api.replaceAll(flag, uuid.toString());
             }
         }
         // 没有path参数则返回原数据
