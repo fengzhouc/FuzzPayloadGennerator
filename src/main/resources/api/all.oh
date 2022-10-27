@@ -1,3 +1,16 @@
+pages/createpage-entervariables.action?SpaceKey=x
+pages/createpage-entervariables.action
+confluence/pages/createpage-entervariables.action?SpaceKey=x
+confluence/pages/createpage-entervariables.action
+wiki/pages/createpage-entervariables.action?SpaceKey=x
+wiki/pages/createpage-entervariables.action
+pages/doenterpagevariables.action
+pages/createpage.action?spaceKey=myproj
+pages/templates2/viewpagetemplate.action
+pages/createpage-entervariables.action
+template/custom/content-editor
+templates/editor-preload-container
+users/user-dark-features
 !.gitignore
 !.htaccess
 !.htpasswd
