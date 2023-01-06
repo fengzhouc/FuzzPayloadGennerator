@@ -24,21 +24,21 @@ public class Info {
         img.setIcon(imageIcon);
         img.setBounds(5, 5, imageIcon.getIconWidth(),imageIcon.getIconHeight());
         info.add(img);
-        info.add(new JLabel("Global Setting"));
-        JCheckBox collect = new JCheckBox("CollectLog");
-        collect.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                JCheckBox jcb = (JCheckBox) e.getItem();// 将得到的事件强制转化为JCheckBox类
-                if (jcb.isSelected()) {// 判断是否被选择
-                    CommonStore.ON_OFF = true;
-                    ReqMessageCollector.preInit();
-                }else {
-                    CommonStore.ON_OFF = false;
-                }
-            }
-        });
-        info.add(collect);
+        // info.add(new JLabel("Global Setting"));
+        // JCheckBox collect = new JCheckBox("CollectLog");
+        // collect.addItemListener(new ItemListener() {
+        //     @Override
+        //     public void itemStateChanged(ItemEvent e) {
+        //         JCheckBox jcb = (JCheckBox) e.getItem();// 将得到的事件强制转化为JCheckBox类
+        //         if (jcb.isSelected()) {// 判断是否被选择
+        //             CommonStore.ON_OFF = true;
+        //             ReqMessageCollector.preInit();
+        //         }else {
+        //             CommonStore.ON_OFF = false;
+        //         }
+        //     }
+        // });
+        // info.add(collect);
 
         info.add(new JLabel("    "));
         info.add(new JLabel("By: alumm0x"));

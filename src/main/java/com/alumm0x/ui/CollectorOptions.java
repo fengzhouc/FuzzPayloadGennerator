@@ -5,12 +5,40 @@ import com.alumm0x.collect.ReqMessageCollector;
 import com.alumm0x.util.CommonStore;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class CollectorOptions {
 
     public static Component getOptions(){
+        // 整个UI
+        JPanel contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout(0, 0));
+
+        // 设置的UI
+        JPanel panel = new JPanel();
+        FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+        flowLayout.setAlignment(FlowLayout.LEFT);
+        // 设置：过滤的UI
+        JCheckBox collect = new JCheckBox("On-Off");
+        collect.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JCheckBox jcb = (JCheckBox) e.getItem();// 将得到的事件强制转化为JCheckBox类
+                if (jcb.isSelected()) {// 判断是否被选择
+                    CommonStore.ON_OFF = true;
+                    ReqMessageCollector.preInit();
+                }else {
+                    CommonStore.ON_OFF = false;
+                }
+            }
+        });
+        panel.add(collect);
+
         //分割界面
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT); //上下分割
 
@@ -28,7 +56,11 @@ public class CollectorOptions {
         tabs.addTab("Response", CommonStore.responseViewer.getComponent());
         splitPane.setRightComponent(tabs);
 
-        return splitPane;
+        // 组装完整UI
+        contentPane.add(panel, BorderLayout.NORTH);
+        contentPane.add(splitPane, BorderLayout.CENTER);
+
+        return contentPane;
     }
 }
 
