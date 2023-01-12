@@ -17,8 +17,6 @@ public class GeneratorFactory implements IIntruderPayloadGeneratorFactory {
     @Override
     public String getGeneratorName() {
         if (type.equalsIgnoreCase("api")){
-            // 内置数据落地本地
-            ApiGenerator.preInit();
             return "Fuzz-Api";
         }
         return "Fuzz-Password";

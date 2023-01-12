@@ -37,6 +37,10 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
         this.payloadIndex = 0;
     }
 
+    public ApiGenerator(){
+        preInit();
+    }
+
     /**
      * 最开始的初始化，一些前置工作的执行，比如
      * 1.创建文件夹/文件
@@ -48,22 +52,15 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
         String path = file.getPath();
         // 先加载本地的api字典
         BufferedReader in = null;
-        BufferedReader whiteconfig = null;
         try {
             in = new BufferedReader(new FileReader(path + "/all.oh"));
             String str;
             while ((str = in.readLine()) != null) {
                 CommonStore.ALL_DATA.add(str);
             }
-            whiteconfig = new BufferedReader(new FileReader(path + "/whitepruffix.config"));
-            String wstr;
-            while ((wstr = whiteconfig.readLine()) != null) {
-                CommonStore.WHITE_PRUFFIX.add(wstr);
-            }
         } catch (IOException ignored) {
             // 本地没有就加载jar里面内置的字典数据
             CommonStore.ALL_DATA = SourceLoader.loadSources("/api/all.oh");
-            CommonStore.WHITE_PRUFFIX = SourceLoader.loadSources("/api/whitepruffix.config");
             // 再尝试落地内置字典到本地
             BufferedWriter out = null;
             try {
@@ -74,17 +71,6 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
                 out = new BufferedWriter(new FileWriter(apiFile));
                 for (String data :
                         CommonStore.ALL_DATA) {
-                    out.write(data);
-                    out.newLine();
-                }
-
-                File whiteConfig = new File(path + "/whitepruffix.config");
-                if (whiteConfig.createNewFile()){
-                    CommonStore.callbacks.printOutput("CreateFile: " + whiteConfig.getAbsolutePath());
-                }
-                out = new BufferedWriter(new FileWriter(whiteConfig));
-                for (String data :
-                        CommonStore.WHITE_PRUFFIX) {
                     out.write(data);
                     out.newLine();
                 }
@@ -107,7 +93,6 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
             }
         }
         CommonStore.ALL_DATA_PATH = path + "/all.oh"; //将落地的字典文件路径保存起来
-        CommonStore.WHITE_PRUFFIX_PATH = path + "/whitepruffix.config"; //将落地的字典文件路径保存起来
     }
 
     /**

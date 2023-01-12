@@ -3,11 +3,10 @@ package com.alumm0x.collect;
 import burp.*;
 import com.alumm0x.generator.GeneratorFactory;
 import com.alumm0x.util.CommonStore;
+import com.alumm0x.util.SourceLoader;
 
 import javax.swing.table.AbstractTableModel;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,10 +22,54 @@ public class ReqMessageCollector extends AbstractTableModel implements IHttpList
     /**
      * 最开始的初始化，一些前置工作的执行，比如
      * 1.创建文件目录
+     * 2.加载配置信息
      */
     public static void preInit(){
         // 创建文件目录
         CommonStore.PARENT_PATH = GeneratorFactory.creatFilePath(ReqMessageCollector.class.getName()).getPath();
+        // 先加载本地的配置文件
+        BufferedReader whiteconfig = null;
+        try {
+            whiteconfig = new BufferedReader(new FileReader(CommonStore.PARENT_PATH + "/whitepruffix.config"));
+            String wstr;
+            while ((wstr = whiteconfig.readLine()) != null) {
+                CommonStore.WHITE_PRUFFIX.add(wstr);
+            }
+        } catch (IOException ignored) {
+            // 本地没有就加载jar里面内置的字典数据
+            CommonStore.WHITE_PRUFFIX = SourceLoader.loadSources("/api/whitepruffix.config");
+            // 再尝试落地内置字典到本地
+            BufferedWriter out = null;
+            try {
+                File whiteConfig = new File(CommonStore.PARENT_PATH + "/whitepruffix.config");
+                if (whiteConfig.createNewFile()){
+                    CommonStore.callbacks.printOutput("CreateFile: " + whiteConfig.getAbsolutePath());
+                }
+                out = new BufferedWriter(new FileWriter(whiteConfig));
+                for (String data :
+                        CommonStore.WHITE_PRUFFIX) {
+                    out.write(data);
+                    out.newLine();
+                }
+            } catch (IOException e) {
+                CommonStore.callbacks.printError("[ReqMessageCollector.preInit]" + e.getMessage());
+            }finally {
+                if (out != null) {
+                    try {
+                        out.flush();
+                        out.close();
+                    } catch (IOException ignored1) {
+                    }
+                }
+                if (whiteconfig != null) {
+                    try {
+                        whiteconfig.close();
+                    } catch (IOException ignored1) {
+                    }
+                }
+            }
+        }
+        CommonStore.WHITE_PRUFFIX_PATH = CommonStore.PARENT_PATH + "/whitepruffix.config"; //将落地的字典文件路径保存起来
     }
 
     // 请求类型黑名单，不采集起信息
