@@ -1,13 +1,8 @@
 package com.alumm0x.ui;
 
-import com.alumm0x.collect.ReqMessageCollector;
-import com.alumm0x.util.CommonStore;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class Info {
 

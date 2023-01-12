@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,38 +29,47 @@ public class ReqMessageCollector extends AbstractTableModel implements IHttpList
         CommonStore.PARENT_PATH = GeneratorFactory.creatFilePath(ReqMessageCollector.class.getName()).getPath();
     }
 
+    // 请求类型黑名单，不采集起信息
+    private boolean checkPruffix(String header) {
+        String kv = header.split(":")[1].trim();
+        for (String pruffix : CommonStore.WHITE_PRUFFIX) {
+            if (kv.startsWith(pruffix.trim())){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo) {
         if (!messageIsRequest && CommonStore.ON_OFF) {
             int row = CommonStore.log.size();
             if (toolFlag == 4 || toolFlag == 8 || toolFlag == 16) {//proxy/spider/scanner
-
+                IResponseInfo responseInfo = CommonStore.helpers.analyzeResponse(messageInfo.getResponse());
+                List<String> respheaders = responseInfo.getHeaders();
+                for (String s : respheaders) {
+                    if (s.toLowerCase(Locale.ROOT).startsWith("Content-Type".toLowerCase(Locale.ROOT))) {
+                        if (checkPruffix(s)) {
+                            break;
+                        } else {
+                            return;
+                        }
+                    }
+                } // 如果没有centent-type就默认采集
                 IRequestInfo requestInfo = CommonStore.helpers.analyzeRequest(messageInfo);
                 URL url = requestInfo.getUrl();
                 String host = url.getHost();
                 //子域名的数据数组，eg：a.b.c.d.com，a/b/c/a.b.c
                 String[] domains = handleHost(host);
 
-                String path = url.getPath();
                 //目录的数据数组
+                String path = url.getPath();
                 String[] dirs = handlePath(path);
+
                 //文件的数据数组
-                String[] files = null;
-                if (dirs.length > 0 && path.contains(".")){
-                    //是资源文件,生成文件数据数组,文件名数据的类型白名单
-                    if (!path.endsWith(".css")
-                            && !path.endsWith(".png")
-                            && !path.endsWith(".gif")
-                            && !path.endsWith(".jpg")
-                            && !path.endsWith(".ico")
-                            && !path.endsWith(".woff2")
-                            && !path.endsWith(".woff")
-                            && !path.endsWith(".svg")
-                            && !path.endsWith(".ttf")){
-                        //将完整的url加进去，包含查询参数
-                        files = new String[]{url.getFile()};
-                    }
-                }
+                //将完整的url加进去，包含查询参数
+                String[] files = new String[]{url.getFile()};;
+
                 //参数名的数据数组
                 String[] param_list = handleParam(requestInfo);
 
@@ -67,7 +77,6 @@ public class ReqMessageCollector extends AbstractTableModel implements IHttpList
                 write(domains, dirs, param_list, files);
                 //设置面板数据
                 logAdd(messageInfo, domains, dirs, param_list, files);
-
             }
             fireTableRowsInserted(row, row);
         }
@@ -124,7 +133,6 @@ public class ReqMessageCollector extends AbstractTableModel implements IHttpList
         java.util.List<String> up = Arrays.asList(dirs);
         //up是数组转换的，不能add/remove，所以需要重新new一个ArrayList
         java.util.List<String> arrList = new ArrayList<>(up);
-        arrList.add(path); // 添加完整url
         return arrList.toArray(new String[0]);
     }
 
