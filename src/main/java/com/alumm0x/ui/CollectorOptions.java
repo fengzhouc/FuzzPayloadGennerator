@@ -31,6 +31,7 @@ public class CollectorOptions {
                 JCheckBox jcb = (JCheckBox) e.getItem();// 将得到的事件强制转化为JCheckBox类
                 if (jcb.isSelected()) {// 判断是否被选择
                     CommonStore.ON_OFF = true;
+                    // 开关即可以更新配置
                     ReqMessageCollector.preInit();
                 }else {
                     CommonStore.ON_OFF = false;

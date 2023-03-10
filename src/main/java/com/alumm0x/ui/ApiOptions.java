@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,11 +177,11 @@ public class ApiOptions {
                         while ((str = in.readLine()) != null) {
                             ApiGenerator.notInsideAdd(CommonStore.ALL_DATA, str);
                         }
-                        // 再写到本地文件
-                        File apiFile = new File(CommonStore.ALL_DATA_PATH);
-                        if (apiFile.createNewFile()){
-                            CommonStore.ALL_DATA_PATH = apiFile.getAbsolutePath();
+                        // 再写到本地文件,先判断是否初始化配置文件，没有的话调用初始化
+                        if (CommonStore.ALL_DATA_PATH.equalsIgnoreCase("")){
+                            ApiGenerator.preInit();
                         }
+                        File apiFile = new File(CommonStore.ALL_DATA_PATH);
                         out = new BufferedWriter(new FileWriter(apiFile));
                         for (String data : CommonStore.ALL_DATA) {
                             out.write(data);
@@ -188,7 +189,7 @@ public class ApiOptions {
                         }
                         JOptionPane.showMessageDialog(options,"导入成功");
                     } catch (IOException e1) {
-                        CommonStore.callbacks.printError(e1.getMessage());
+                        CommonStore.callbacks.printError(Arrays.toString(e1.getStackTrace()));
                         JOptionPane.showMessageDialog(options,"导入失败,请看日志");
                     } finally {
                             if (out != null) {

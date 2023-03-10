@@ -37,7 +37,7 @@ public class ReqMessageCollector extends AbstractTableModel implements IHttpList
             }
         } catch (IOException ignored) {
             // 本地没有就加载jar里面内置的字典数据
-            CommonStore.WHITE_PRUFFIX = SourceLoader.loadSources("/api/whitepruffix.config");
+            CommonStore.WHITE_PRUFFIX = SourceLoader.loadSources("/collect/whitepruffix.config");
             // 再尝试落地内置字典到本地
             BufferedWriter out = null;
             try {

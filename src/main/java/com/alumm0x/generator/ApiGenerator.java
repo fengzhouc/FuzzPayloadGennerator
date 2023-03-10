@@ -147,7 +147,7 @@ public class ApiGenerator implements IIntruderPayloadGenerator {
      * @param add 添加的数据
      */
     public static void notInsideAdd(List<String> list, String add){
-        if (!list.contains(add)){
+        if (!add.equalsIgnoreCase("") && !list.contains(add)){
             list.add(add);
         }
     }
